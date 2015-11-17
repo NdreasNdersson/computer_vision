@@ -361,7 +361,7 @@ for(i=1; i<=nx; i++) {
 	 /* 
 	    SUPPLEMENT CODE HERE
 	 */
-	 w5 = 1.0 / (2.0 * ht);
+	 w5 = 1.0 / ht;
 	 df_dz = w5*(f1[i][j] - f2[i][j]);
 	 
 	 /* calculate matrix entries and right-hand side */
@@ -371,8 +371,8 @@ for(i=1; i<=nx; i++) {
 	 /* 
 	    SUPPLEMENT CODE HERE 
 	 */
-	 dxz[i][j] = -df_dx * df_dz;
-	 dyz[i][j] = -df_dy * df_dz;
+	 dxz[i][j] = df_dx * df_dz;
+	 dyz[i][j] = df_dy * df_dz;
 
      }
  }
@@ -427,19 +427,19 @@ for(i=1; i<=nx; i++) {
 	   SUPPLEMENT CODE HERE
 	*/
 		trace = dxx[i][j] + dyy[i][j];
-		det = dxx[i][j] * dyy[i][j] - dxy[i][j] * dxy[i][j];
+		det = dxx[i][j] * dyy[i][j];
 		if(trace <= eps) {
 			u[i][j] = 0;
 			v[i][j] = 0;
 			c[i][j] = 0;
 		} else if(det <= eps) {
-			u[i][j] = ((-1) / (dxx[i][j]*dxx[i][j] + dyy[i][j]*dyy[i][j])) * dxz[i][j];
-			v[i][j] = ((-1) / (dxx[i][j]*dxx[i][j] + dyy[i][j]*dyy[i][j])) * dyz[i][j];
+			u[i][j] = ((-1) / (dxx[i][j] + dyy[i][j])) * dxz[i][j];
+			v[i][j] = ((-1) / (dxx[i][j] + dyy[i][j])) * dyz[i][j];
 			c[i][j] = 128;
 		} else {
 			u[i][j] = (dxz[i][j] * dyy[i][j] - dyz[i][j] * dxy[i][j])/det;
 			v[i][j] = (dxx[i][j] * dyz[i][j] - dxz[i][j] * dxy[i][j])/det;
-			c[i][j] = 255;
+			c[i][j] = 256;
 		}
 
     }
