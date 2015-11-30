@@ -361,7 +361,7 @@ for(i=1; i<=nx; i++) {
 	 /* 
 	    SUPPLEMENT CODE HERE
 	 */
-	 w5 = 1.0 / (2.0 * ht);
+	 w5 = 1.0 / (1.0 * ht);
 	 df_dz = w5*(f1[i][j] - f2[i][j]);
 	 
 	 /* calculate matrix entries and right-hand side */
