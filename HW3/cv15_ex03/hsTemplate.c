@@ -179,11 +179,37 @@ for (i=1; i<=nx; i++)
 /*
  SUPPLEMENT CODE
 */
-nn = 4;
+/*
+float sumu = 0, sumv = 0, i2, j2;
+int dist = 1;
+nn = pow(dist*2+1, 2)-1;
+*/
+float sumu, sumv;
 for (i=1; i<=nx; i++){
 	for (j=1; j<=ny; j++){
-		u[i][j] = (-fx[i][j]*(fy[i][j]*v1[i][j]+fz[i][j])+alpha*nn*(u1[i-1][j] + u1[i][j-1] + u1[i+1][j] + u1[i][j+1])) / (powf(fx[i][j], 2) + alpha * nn);
-		v[i][j] = (-fy[i][j]*(fx[i][j]*u1[i][j]+fz[i][j])+alpha*nn*(v1[i-1][j] + v1[i][j-1] + v1[i+1][j] + v1[i][j+1])) / (powf(fy[i][j], 2) + alpha * nn);
+		/*
+		for (i2 = -dist; i2<=dist; i2++){
+			for (j2 = -dist; j2<=dist; j2++){
+				if (!(i2 == 0 && j2 == 0) && i+i2 >= 0 && j+j2 >= 0 && i+i2 <= nx && j+j2 <= ny){
+					sumu += u1[i+i2][j+j2];
+					sumv += v1[i+i2][j+j2];
+				}
+			}
+		}*/
+		sumu = u1[i-1][j] + u1[i+1][j] + u1[i][j-1] + u1[i][j+1];
+			sumv = v1[i-1][j] + v1[i+1][j] + v1[i][j-1] + v1[i][j+1];
+		if ((i == 1 && j == 1) || (i == nx && j == ny) || (i == 1 && j == ny) || (i == nx && j == 1)){
+			/* corner */
+			nn = 2;
+		}else if(i == 1 || j == 1 || i == nx || j == ny){
+			/* edge */
+			nn = 3;
+		}else{
+			/* center */
+			nn = 4;
+		}
+		u[i][j] = (-fx[i][j]*(fy[i][j]*v1[i][j]+fz[i][j])+alpha*sumu) / (powf(fx[i][j], 2) + alpha * nn);
+		v[i][j] = (-fy[i][j]*(fx[i][j]*u1[i][j]+fz[i][j])+alpha*sumv) / (powf(fy[i][j], 2) + alpha * nn);
 	}
 }
 
